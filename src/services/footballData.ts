@@ -1,4 +1,3 @@
-
 // Mock data for football standings
 export interface TeamStanding {
   position: number;
@@ -85,28 +84,14 @@ export const getCurrentMatch = (): Promise<Match> => {
  * @param awayTeam The name of the away team
  * @returns MatchPrediction from your model
  * 
- * IMPORTANT:
- * - Set YOUR_API_ENDPOINT to your model's prediction URL
- * - Modify the fetch request/body/headers/response logic to fit your actual API
+ * Uses http://127.0.0.1:5000 as the API endpoint.
  */
 export const getMatchPrediction = async (
   homeTeam: string,
   awayTeam: string
 ): Promise<MatchPrediction> => {
-  // For development/testing, return mock data to avoid API errors
-  // Remove this mock section when connecting to your real API
-  return {
-    homeTeam,
-    awayTeam,
-    homeWinProbability: homeTeam === "Manchester United" ? 55 : 40,
-    drawProbability: 25,
-    awayWinProbability: homeTeam === "Manchester United" ? 20 : 35,
-  };
-  
-  // Uncomment and customize this code when your API is ready:
-  /*
-  // REPLACE this with your actual API endpoint!
-  const YOUR_API_ENDPOINT = "https://your-model-api-url.com/predict";
+  // API endpoint provided by the user
+  const YOUR_API_ENDPOINT = "http://127.0.0.1:5000";
 
   // Compose data to send (adjust as needed for your model)
   const postData = {
@@ -114,12 +99,11 @@ export const getMatchPrediction = async (
     awayTeam,
   };
 
-  // Example POST request; change method/headers/body/response processing for your API
   const response = await fetch(YOUR_API_ENDPOINT, {
-    method: "POST", // or "GET", as appropriate
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Add e.g. "Authorization": "Bearer YOUR_API_KEY" if needed
+      // Add other headers (like Authorization) if needed
     },
     body: JSON.stringify(postData),
   });
@@ -128,16 +112,15 @@ export const getMatchPrediction = async (
     throw new Error(`Prediction API error: ${response.status}`);
   }
 
-  // Adjust this to fit your API's return value!
+  // Expecting: { homeWinProbability: number, drawProbability: number, awayWinProbability: number }
   const data = await response.json();
 
-  // Assume your API returns probabilities as shown. Transform as needed!
+  // Defensive: Use fallback values if keys are missing
   return {
     homeTeam,
     awayTeam,
-    homeWinProbability: data.homeWinProbability, // e.g. 55
-    drawProbability: data.drawProbability,       // e.g. 25
-    awayWinProbability: data.awayWinProbability, // e.g. 20
+    homeWinProbability: data.homeWinProbability ?? 0,
+    drawProbability: data.drawProbability ?? 0,
+    awayWinProbability: data.awayWinProbability ?? 0,
   };
-  */
 };
