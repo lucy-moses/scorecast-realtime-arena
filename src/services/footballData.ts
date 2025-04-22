@@ -84,26 +84,23 @@ export const getCurrentMatch = (): Promise<Match> => {
  * @param awayTeam The name of the away team
  * @returns MatchPrediction from your model
  * 
- * Uses http://127.0.0.1:5000 as the API endpoint.
+ * Uses http://127.0.0.1:5000/predict as the API endpoint.
  */
 export const getMatchPrediction = async (
   homeTeam: string,
   awayTeam: string
 ): Promise<MatchPrediction> => {
-  // API endpoint provided by the user
-  const YOUR_API_ENDPOINT = "http://127.0.0.1:5000";
+  const YOUR_API_ENDPOINT = "http://127.0.0.1:5000/predict";
 
-  // Compose data to send (adjust as needed for your model)
+  // Format input for your Flask API: expects an array in 'input'
   const postData = {
-    homeTeam,
-    awayTeam,
+    input: [homeTeam, awayTeam],
   };
 
   const response = await fetch(YOUR_API_ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Add other headers (like Authorization) if needed
     },
     body: JSON.stringify(postData),
   });
@@ -112,15 +109,20 @@ export const getMatchPrediction = async (
     throw new Error(`Prediction API error: ${response.status}`);
   }
 
-  // Expecting: { homeWinProbability: number, drawProbability: number, awayWinProbability: number }
+  // Response shape: {prediction: [score or probabilities]}
   const data = await response.json();
 
-  // Defensive: Use fallback values if keys are missing
+  // Interpret data: change this as needed to fit your model's output
+  // Here, we assume: prediction = [homeWin, draw, awayWin] as probabilities (%) for demo
+  const [homeWinProbability, drawProbability, awayWinProbability] = Array.isArray(data.prediction)
+    ? data.prediction
+    : [0, 0, 0];
+
   return {
     homeTeam,
     awayTeam,
-    homeWinProbability: data.homeWinProbability ?? 0,
-    drawProbability: data.drawProbability ?? 0,
-    awayWinProbability: data.awayWinProbability ?? 0,
+    homeWinProbability: homeWinProbability ?? 0,
+    drawProbability: drawProbability ?? 0,
+    awayWinProbability: awayWinProbability ?? 0,
   };
 };
