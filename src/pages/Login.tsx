@@ -30,15 +30,15 @@ const Login = () => {
         <div className="flex justify-center mb-8">
           <div className="flex flex-col items-center">
             <img src="/lovable-uploads/5cc95bdd-95a6-43d8-bebd-90113a51b28b.png" alt="Logo" className="w-20 h-20" />
-            <h1 className="text-3xl font-bold text-white mt-4">Paris Premier League</h1>
-            <p className="text-football-light mt-2">Real-time scores and predictions</p>
+            <h1 className="text-3xl font-bold text-white mt-4">Scoreline Forecast</h1>
+            <p className="text-football-light mt-2">Real-time predictions and scores</p>
           </div>
         </div>
         
         <Card>
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
-            <CardDescription>Enter your credentials to access your account</CardDescription>
+            <CardDescription>Enter your credentials to access Scoreline Forecast</CardDescription>
           </CardHeader>
           <form onSubmit={handleLogin}>
             <CardContent className="space-y-4">

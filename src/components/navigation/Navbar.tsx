@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3">
             <img src="/lovable-uploads/5cc95bdd-95a6-43d8-bebd-90113a51b28b.png" alt="Logo" className="w-12 h-12" />
-            <span className="text-2xl font-bold">Paris Premier League</span>
+            <span className="text-2xl font-bold">Scoreline Forecast</span>
           </Link>
         </div>
         <div className="flex items-center gap-6 text-lg">
