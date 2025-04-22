@@ -1,3 +1,4 @@
+
 // Mock data for football standings
 export interface TeamStanding {
   position: number;
@@ -28,7 +29,7 @@ export interface MatchPrediction {
 }
 
 // Mock function to fetch league standings
-export const getLeagueStandings = () => {
+export const getLeagueStandings = (): Promise<TeamStanding[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
@@ -48,7 +49,7 @@ export const getLeagueStandings = () => {
 };
 
 // Mock function to fetch upcoming fixtures
-export const getUpcomingFixtures = () => {
+export const getUpcomingFixtures = (): Promise<Match[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
@@ -63,7 +64,7 @@ export const getUpcomingFixtures = () => {
 };
 
 // Mock function to get current match
-export const getCurrentMatch = () => {
+export const getCurrentMatch = (): Promise<Match> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
@@ -92,6 +93,18 @@ export const getMatchPrediction = async (
   homeTeam: string,
   awayTeam: string
 ): Promise<MatchPrediction> => {
+  // For development/testing, return mock data to avoid API errors
+  // Remove this mock section when connecting to your real API
+  return {
+    homeTeam,
+    awayTeam,
+    homeWinProbability: homeTeam === "Manchester United" ? 55 : 40,
+    drawProbability: 25,
+    awayWinProbability: homeTeam === "Manchester United" ? 20 : 35,
+  };
+  
+  // Uncomment and customize this code when your API is ready:
+  /*
   // REPLACE this with your actual API endpoint!
   const YOUR_API_ENDPOINT = "https://your-model-api-url.com/predict";
 
@@ -126,4 +139,5 @@ export const getMatchPrediction = async (
     drawProbability: data.drawProbability,       // e.g. 25
     awayWinProbability: data.awayWinProbability, // e.g. 20
   };
+  */
 };
