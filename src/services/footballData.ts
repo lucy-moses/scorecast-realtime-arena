@@ -1,4 +1,3 @@
-
 // Mock data for football standings
 export interface TeamStanding {
   position: number;
@@ -29,7 +28,7 @@ export interface MatchPrediction {
 }
 
 // Mock function to fetch league standings
-export const getLeagueStandings = (): Promise<TeamStanding[]> => {
+export const getLeagueStandings = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
@@ -49,7 +48,7 @@ export const getLeagueStandings = (): Promise<TeamStanding[]> => {
 };
 
 // Mock function to fetch upcoming fixtures
-export const getUpcomingFixtures = (): Promise<Match[]> => {
+export const getUpcomingFixtures = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
@@ -64,7 +63,7 @@ export const getUpcomingFixtures = (): Promise<Match[]> => {
 };
 
 // Mock function to get current match
-export const getCurrentMatch = (): Promise<Match | null> => {
+export const getCurrentMatch = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
@@ -78,28 +77,53 @@ export const getCurrentMatch = (): Promise<Match | null> => {
   });
 };
 
-// Mock function to get prediction for a match
-export const getMatchPrediction = (homeTeam: string, awayTeam: string): Promise<MatchPrediction> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (homeTeam === "Manchester United" && awayTeam === "Liverpool") {
-        resolve({
-          homeTeam,
-          awayTeam,
-          homeWinProbability: 55,
-          drawProbability: 25,
-          awayWinProbability: 20
-        });
-      } else {
-        // Default prediction
-        resolve({
-          homeTeam,
-          awayTeam,
-          homeWinProbability: 40,
-          drawProbability: 30,
-          awayWinProbability: 30
-        });
-      }
-    }, 600);
+/**
+ * Fetch prediction from your custom model API.
+ * 
+ * @param homeTeam The name of the home team
+ * @param awayTeam The name of the away team
+ * @returns MatchPrediction from your model
+ * 
+ * IMPORTANT:
+ * - Set YOUR_API_ENDPOINT to your model's prediction URL
+ * - Modify the fetch request/body/headers/response logic to fit your actual API
+ */
+export const getMatchPrediction = async (
+  homeTeam: string,
+  awayTeam: string
+): Promise<MatchPrediction> => {
+  // REPLACE this with your actual API endpoint!
+  const YOUR_API_ENDPOINT = "https://your-model-api-url.com/predict";
+
+  // Compose data to send (adjust as needed for your model)
+  const postData = {
+    homeTeam,
+    awayTeam,
+  };
+
+  // Example POST request; change method/headers/body/response processing for your API
+  const response = await fetch(YOUR_API_ENDPOINT, {
+    method: "POST", // or "GET", as appropriate
+    headers: {
+      "Content-Type": "application/json",
+      // Add e.g. "Authorization": "Bearer YOUR_API_KEY" if needed
+    },
+    body: JSON.stringify(postData),
   });
+
+  if (!response.ok) {
+    throw new Error(`Prediction API error: ${response.status}`);
+  }
+
+  // Adjust this to fit your API's return value!
+  const data = await response.json();
+
+  // Assume your API returns probabilities as shown. Transform as needed!
+  return {
+    homeTeam,
+    awayTeam,
+    homeWinProbability: data.homeWinProbability, // e.g. 55
+    drawProbability: data.drawProbability,       // e.g. 25
+    awayWinProbability: data.awayWinProbability, // e.g. 20
+  };
 };
